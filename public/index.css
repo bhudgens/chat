@@ -1,0 +1,64 @@
+textarea {
+  border: 0;
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+.chatArea {
+  height: 100vh;
+}
+
+.roomlistColumn {
+  padding: 0;
+  /*border-style: ridge;
+  border-width: 1px;*/
+  height: 100vh;
+}
+
+.message {
+  padding-left: 15px;
+}
+
+.nameAndTime {
+  padding-left: 20px;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 12;
+  color: grey;
+}
+
+.time {
+  font-weight: lighter;
+  font-size: 12;
+  color: black;
+}
+
+.chathistory {
+  height: 95vh;
+}
+
+.chatwindow {
+  border-style: ridge;
+  border-width: 1px;
+  padding: 0;
+  margin: 0;
+}
+
+.peopleinroom {
+  padding: 0;
+  margin: 0;
+  border-style: ridge;
+  border-width: 1px;
+  height: 100vh;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.no-margin {
+  margin: 0;
+}

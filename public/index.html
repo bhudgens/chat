@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clu Chat</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="/assets/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="/assets/jsgrid.min.css" />
+  <link type="text/css" rel="stylesheet" href="/assets/jsgrid-theme.min.css" />
+  <!-- <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" /> -->
+  <link rel="stylesheet" href="index.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
+</head>
+
+<body>
+  <div class="container-fluid">
+    <!-- <div class="row">
+        <div class="col-xs-4 col-md-2">
+            <input id="username" type="text" class="form-control" placeholder="Enter Your Username">
+        </div>
+      </div> -->
+    <div class="chatArea row">
+      <div class="roomlistColumn col-xs-2 col-md-2">
+        <div class="roomList grid" id="roomList">
+        </div>
+        <input id="addNewRoom" type="text" class="addNewRoom form-control" placeholder="Add Room... (does not work)">
+        <!-- <textarea id="roomList" class="col-xs-12 col-md-12" name="roomList" readonly></textarea> -->
+      </div>
+      <div class="chatwindow col-xs-8 col-md-8">
+        <!-- <textarea id="chatHistory" class="chathistory col-xs-12 col-md-12" name="chatHistory" readonly></textarea> -->
+        <div class="chatMessages grid" id="chatMessages">
+        </div>
+        <input id="currentMessage" type="text" class="currentmessage form-control" placeholder="Message...">
+      </div>
+      <div class="peopleinroom col-xs-2 col-md-2">
+        <!-- <textarea id="peopleInRoom" class="col-xs-12 col-md-12" name="peopleHistory" readonly></textarea> -->
+        <div class="peopleInRoomList grid" id="peopleInRoomList">
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row">
+      <div class="no-padding col-md-8 col-md-offset-2">
+      </div>
+    </div> -->
+  </div>
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="/assets/jquery.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script> -->
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="/assets/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/assets/jsgrid.min.js"></script>
+  <script src="chat.js" charset="utf-8"></script>
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+#!/usr/bin/env node
+
+"use strict";
+
+/**********************************************************************
+ * Libraries
+ *********************************************************************/
+
+const config = require('../config/config.js');
+
+/**********************************************************************
+ * Logging Options:
+ *   logging - Enables any logging at all
+ *   debug - Enable extra output to help debug problem
+ *   verbose - OMG, you must be developing.  You probably don't want
+ *   $others - Any can be enabled/disabled but default to enabled
+ *********************************************************************/
+
+const log = require('iphb-logs');
+
+/**********************************************************************
+ * Help Text
+ *********************************************************************/
+
+/**
+ * Dynamically allow any config in our configuration file be
+ * overridden on the command line.
+ */
+let _configOverrides = [];
+for (let key in config) {
+  _configOverrides.push(`  --${key} <${key}>`);
+}
+
+/**
+ * See Docopts Syntax here:
+ *   http://bit.ly/1EQXdRe
+ */
+const help = `
+Usage:
+  command [options] -r <requiredparam>
+  command [options]
+
+Options:
+  -c --config                      Display the Environment
+  -d --debug                       Enable Debug Output
+  -h --help                        Show this help
+  -l --log                         Enable Log Output
+  -v --verbose                     Enable Verbose Output
+
+Additional Options:
+${_configOverrides.join('\n')}
+
+A generic command documentation you should change
+`;
+
+/** Process The Docopts */
+const docopt = require('docopt').docopt;
+const options = docopt(help);
+
+/** Handle dynamic config overrides */
+for (let option in options) {
+  if (options.hasOwnProperty(option) && options[option] && options[option] !== null) {
+    const optionWithoutDashes = option.replace(/^--/, "");
+    config[optionWithoutDashes] = options[option];
+  }
+}
+
+/** Respect log config */
+log.enable.debug = config.debug;
+log.enable.verbose = config.verbose;
+
+/********************************************************************
+ * Imports
+ ********************************************************************/
+
+const api = require('../lib/api.js');
+
+/**********************************************************************
+ * Setup
+ *********************************************************************/
+
+// Emit our command line options if debug is set
+log.debug("Command Line Settings:", options);
+
+/**
+ * Output our environment and quit
+ */
+if (options['--config']) {
+  // Force logging enabled
+  log.enable.logging = true;
+
+  // Make output look nice
+  let _message = [];
+  for (let key in config) {
+    if (key !== "descriptions") {
+      _message.push(`${key}=${config[key]}`);
+    }
+  }
+  log.info(`
+  ------------------------------------------------------------------
+  Configuration:
+  ------------------------------------------------------------------
+  ${_message.join('\n  ')}
+  ------------------------------------------------------------------
+  `);
+  process.exit(0);
+}
+
+/**********************************************************************
+ * Main
+ *********************************************************************/
+
+api.publicFunction()
+  .then(r => log.info(`Success: ${r}`))
+  .catch(e => log.error(`Error: ${e}`));
