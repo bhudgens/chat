@@ -128,6 +128,7 @@ const updateClickEvents = () => {
               'Accept': 'application/json, text/plain, */*',
               'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify(_newRoom)
           })
           .then(updateUI);
@@ -145,6 +146,7 @@ const updateClickEvents = () => {
               'Accept': 'application/json, text/plain, */*',
               'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify(_user)
           })
           .then(updateUI);
@@ -234,9 +236,9 @@ const doScrollChatWindowAllTheWayDown = () => {
 //   un.value = username;
 // };
 
-const updateUI = () => fetch('./settings')
+const updateUI = () => fetch('./settings', { credentials: 'include' })
   .then(response => response.json())
-  .then(settings => fetch(`./room/${settings.currentRoom}`)
+  .then(settings => fetch(`./room/${settings.currentRoom}`, { credentials: 'include' })
     .then(response => response.json())
     .then(roomData => {
       _currentRoom = roomData;
@@ -271,6 +273,7 @@ const sendMessage = () => {
   };
   fetch('./message', {
       method: "POST",
+      credentials: 'include',
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
