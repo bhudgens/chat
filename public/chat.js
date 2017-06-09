@@ -236,7 +236,14 @@ const doScrollChatWindowAllTheWayDown = () => {
 //   un.value = username;
 // };
 
-const updateUI = () => fetch('./settings', { credentials: 'include' })
+const updateUI = withoutFetch => withoutFetch
+? Promise.all([
+  updateMessages(),
+  updatePeopleInRoom(),
+  updateRoomList(),
+  updateClickEvents()
+])
+: fetch('./settings', { credentials: 'include' })
   .then(response => response.json())
   .then(settings => fetch(`./room/${settings.currentRoom}`, { credentials: 'include' })
     .then(response => response.json())
@@ -273,6 +280,7 @@ const sendMessage = () => {
   };
   currentMessage.value = "";
   _currentRoom.messages.push(_message.message);
+  updateUI(true);
   fetch('./message', {
       method: "POST",
       credentials: 'include',
