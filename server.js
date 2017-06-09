@@ -118,6 +118,12 @@ const _log = msg => org => {
 //   next();
 // });
 
+app.use((req, res, next) => {
+  req.headers = req.headers || {};
+  req.headers["jwt-un"] = req.headers["jwt-un"].replace(/"/g, "");
+  next();
+});
+
 const getRoomData = room => {
   state.rooms = state.rooms || {
     "general": {
