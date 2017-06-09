@@ -238,26 +238,35 @@ const doScrollChatWindowAllTheWayDown = () => {
 //   un.value = username;
 // };
 
+let _lastUpdate = new Date();
 const updateUI = withoutFetch => withoutFetch
   ? Promise.all([
+    Promise.resolve(_lastUpdate = new Date()),
     updateMessages(),
     updatePeopleInRoom(),
     updateRoomList(),
     updateClickEvents()
   ])
-  : fetch('./settings', { credentials: 'include' })
-  .then(response => response.json())
-  .then(settings => fetch(`./room/${settings.currentRoom}`, { credentials: 'include' })
+  : Promise.all([
+    Promise.resolve(new Date()),
+    fetch('./settings', { credentials: 'include' })
     .then(response => response.json())
-    .then(roomData => {
-      _currentRoom = roomData;
-      _currentRoom.id = settings.currentRoom;
-      _rooms = settings.rooms || [];
+    .then(settings => fetch(`./room/${settings.currentRoom}`, { credentials: 'include' })
+      .then(response => response.json())
+      .then(roomData => {
+        _currentRoom = roomData;
+        _currentRoom.id = settings.currentRoom;
+        _rooms = settings.rooms || [];
+      }))
+  ])
+  .then(r => {
+    if (r[0] > _lastUpdate) {
       updateMessages();
       updatePeopleInRoom();
       updateRoomList();
       updateClickEvents();
-    }));
+    }
+  });
 
 const sendMessage = () => {
   const currentMessage = document.getElementById('currentMessage');
