@@ -159,6 +159,7 @@ const addMessageToRoom = (room, message) => {
 const ldapCache = {};
 const getLdapForUser = username => typeof ldapCache[username] === "undefined"
   ? http.get(`http://services-internal.glgresearch.com/epildap/searchldap?sAMAccountName=${username}`)
+  .then(_log("ldap response"))
   .then(response => JSON.parse(response[2]))
   .then(ldapInfo => {
     console.log('ldi1', ldapInfo, ldapInfo[0]);
