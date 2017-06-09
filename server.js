@@ -181,6 +181,9 @@ app.get('/room/:room', (req, res) => getLdapForUser(req.headers["jwt-un"])
       });
     }
     return res.status(200).json(_roomData);
+  })
+  .catch(() => {
+    delete ldapCache[req.headers["jwt-un"]];
   }));
 const btoa = require('btoa');
 app.post('/createPM', (req, res) => getLdapForUser(req.headers["jwt-un"])
