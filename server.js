@@ -173,6 +173,7 @@ app.post('/room', (req, res) => setRoomData(req.body)
   .then(() => res.status(200).json({ status: "OK" })));
 app.get('/room/:room', (req, res) => getLdapForUser(req.headers["jwt-un"])
   .then(ldapInfo => {
+    console.log("ldi", ldapInfo);
     const _roomData = getRoomData({ id: req.params.room });
     if (state.rooms[req.params.room].users.filter(u => u.id === req.headers["jwt-un"]).length === 0) {
       state.rooms[req.params.room].users.push({
