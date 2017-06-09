@@ -271,6 +271,8 @@ const sendMessage = () => {
       id: _currentRoom.id
     }
   };
+  currentMessage.value = "";
+  _currentRoom.messages.push(_message.message);
   fetch('./message', {
       method: "POST",
       credentials: 'include',
@@ -283,7 +285,6 @@ const sendMessage = () => {
     .then(() => updateUI())
     .then(() => {
       doScrollChatWindowAllTheWayDown();
-      currentMessage.value = "";
     });
 };
 
