@@ -112,11 +112,11 @@ const _log = msg => org => {
 };
 
 //XXX: For dev only
-app.use((req, res, next) => {
-  req.headers = req.headers || {};
-  req.headers["jwt-un"] = "bhudgens";
-  next();
-});
+// app.use((req, res, next) => {
+//   req.headers = req.headers || {};
+//   req.headers["jwt-un"] = "bhudgens";
+//   next();
+// });
 
 const getRoomData = room => {
   state.rooms = state.rooms || {
