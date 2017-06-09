@@ -122,6 +122,8 @@ const updateClickEvents = () => {
         const _newRoom = {
           currentRoom: _rooms.filter(r => r.name === e.target.innerHTML)[0].id
         };
+        _currentRoom.currentRoom = _rooms.filter(r => r.name === e.target.innerHTML)[0].id;
+        updateUI(true);
         fetch('./settings', {
             method: "POST",
             headers: {
