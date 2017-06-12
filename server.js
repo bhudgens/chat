@@ -173,7 +173,11 @@ const getLdapForUser = username => typeof ldapCache[username] === "undefined"
     ldapCache[username] = ldapInfo[0];
     return ldapCache[username];
   })
-  : Promise.resolve(ldapCache[username]);
+  : Promise.resolve(ldapCache[username])
+   .then(ldap => {
+     log.info("worked", ldap);
+     return ldap;
+   });
 
 // app.get('/', (req, res) => res.redirect('https://github.com/Beginnerprise/node_boilerplate'));
 app.use('/', express.static(`${__dirname}/public`));
