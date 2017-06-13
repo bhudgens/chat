@@ -58,7 +58,7 @@ const updateRoomList = () => {
     const _unreadNumber = _readStatus[room.id] && _messageCache[room.id].messages.length > _readStatus[room.id]
       ? ` (${_messageCache[room.id].messages.length - _readStatus[room.id]})`
       : '';
-    room.name = `${room.name}${_unreadNumber}`;
+    room.displayName = `${room.name}${_unreadNumber}`;
   });
 
   $("#roomList").jsGrid({
@@ -80,7 +80,7 @@ const updateRoomList = () => {
 
     fields: [{
       title: "Conversations",
-      name: "name",
+      name: "displayName",
       type: "text"
     }]
 
