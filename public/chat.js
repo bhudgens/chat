@@ -137,7 +137,8 @@ const updateClickEvents = () => {
     if (~el.parentNode.parentNode.parentNode.parentNode.parentNode.className.indexOf("roomList")) {
       el.addEventListener("click", e => {
         // console.log("room click");
-        const _roomId = _rooms.filter(r => r && r.name && r.name === e.target.innerHTML)[0].id;
+        /** FIXME: This is a hack until we properly id the convo's */
+        const _roomId = _rooms.filter(r => r && r.name && ~e.target.innerHTML.indexOf(r.name))[0].id;
         _currentRoom = _messageCache[_roomId];
         _currentRoom.currentRoom = _roomId;
         _currentRoom.id = _roomId;
