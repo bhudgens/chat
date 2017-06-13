@@ -150,7 +150,9 @@ const getRoomData = room => {
 };
 
 const setRoomData = room => {
-  state.rooms[room.id] = Object.assign({}, getRoomData(room.id), room);
+  log.info('srd', room);
+  state.rooms[room.id] = Object.assign({}, getRoomData(room), room);
+  log.info('srd-sr', state.rooms[room.id]);
   return Promise.resolve(state.rooms[room.id]);
 };
 
@@ -161,7 +163,7 @@ const setUserSettings = (userid, settings) => {
 
 const addMessageToRoom = (room, message) => {
   log.info("amtr", room, message);
-  state.rooms[room.id] = Object.assign(getRoomData(room), room);
+  state.rooms[room.id] = Object.assign({}, getRoomData(room), room);
   state.rooms[room.id].messages.push(message);
 };
 
