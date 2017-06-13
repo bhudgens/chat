@@ -263,4 +263,4 @@ fs.readFile(config.stateFile, 'utf8')
   });
 
 /** Save the messages every once in a while */
-setInterval(() => fs.writeFile(config.stateFile, state, 'utf8'), 5000);
+setInterval(() => fs.writeFile(config.stateFile, JSON.stringify(state, null, 2), 'utf8'), 5000);
