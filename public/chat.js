@@ -50,6 +50,7 @@ const updateRoomList = () => {
   /** Sort room list by rooms first, then users */
   const _roomList = [].concat(_rooms.filter(r => r.type === "room"), _rooms.filter(r => r.type === "person"));
   _roomList.forEach(room => {
+    console.log(room);
     _readStatus[room.id] = _readStatus[room.id] || 0;
     if (_currentRoom.id === room.id) {
       _readStatus[room.id] = _currentRoom.messages.length;
@@ -308,15 +309,18 @@ const sendMessage = () => {
     return;
   }
 
+  // debugger;
+  // console.log(_currentRoom);
   const _message = {
     message: {
       time: "Jan 6 2:34PM",
       text: currentMessage.value,
     },
     room: {
-      id: _currentRoom.currentRoom
+      id: _currentRoom.id
     }
   };
+  // console.log('m', _message);
   currentMessage.value = "";
   _currentRoom.messages.push(_message.message);
   updateUI(true).then(doScrollChatWindowAllTheWayDown);
