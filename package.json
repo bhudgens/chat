@@ -12,6 +12,7 @@
     "body-parser": "^1.15.0",
     "btoa": "^1.1.2",
     "express": "^4.13.4",
+    "fs-promise": "2.0.3",
     "iphb-logs": "0.0.18",
     "moment": "^2.12.0"
   }

@@ -252,5 +252,15 @@ app.get('/whoami', (req, res) => getLdapForUser(req.headers["jwt-un"])
 /********************************************************************
  * Start the Express Server
  ********************************************************************/
-app.listen(config.serverPort, () =>
-  log.info(`${config.appName} listening on ${config.serverPort}`));
+const fs = require('fs-promise');
+fs.readFile(config.stateFile, 'utf8')
+  .then(file => JSON.parse(file))
+  .then(parsed => Object.assign({}, parsed))
+  .catch(err => log.warn("No State File", err.message))
+  .then(() => {
+    app.listen(config.serverPort, () =>
+      log.info(`${config.appName} listening on ${config.serverPort}`));
+  });
+
+/** Save the messages every once in a while */
+setInterval(() => fs.writeFile(config.stateFile, state, 'utf8'), 5000);
