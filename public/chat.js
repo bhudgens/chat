@@ -1,6 +1,8 @@
 /*global fetch, document*/
 
 let _rooms = [];
+let _currentRoom;
+let _ldapInfo;
 
 const updatePeopleInRoom = () => {
   $("#peopleInRoomList").jsGrid({
@@ -41,7 +43,23 @@ const updatePeopleInRoom = () => {
 //   "type": "person"
 // }];
 
+const _readStatus = {};
+
 const updateRoomList = () => {
+
+  /** Sort room list by rooms first, then users */
+  const _roomList = [].concat(_rooms.filter(r => r.type === "room"), _rooms.filter(r => r.type === "person"));
+  _roomList.forEach(room => {
+    _readStatus[room.id] = _readStatus[room.id] || 0;
+    if (_currentRoom.id === room.id) {
+      _readStatus[room.id] = _currentRoom.messages.length;
+    }
+    const _unreadNumber = _readStatus[room.id] && _messageCache[room.id].messages.length > _readStatus[room.id]
+      ? ` (${_messageCache[room.id].messages.length - _readStatus[room.id]})`
+      : '';
+    room.name = `${room.name}${_unreadNumber}`;
+  });
+
   $("#roomList").jsGrid({
     height: "95vh",
     width: "100%",
@@ -105,7 +123,6 @@ const updateRoomList = () => {
 //   text: "This is a message"
 // }];
 
-let _currentRoom;
 //
 // let _currentRoom = {
 //   name: "General",
@@ -187,7 +204,7 @@ const updateMessages = () => {
           <div class="col-xs-10 col-sm-10 col-md-11 col-lg-10">
             <div class="row">
               <div class="col-lg-12">
-                <span class="name"> ${message.name} </span>
+                <span class="name"> ${message.name || _ldapInfo.displayName} </span>
                 <span class="time"> - ${message.time} </span>
               </div>
             </div>
@@ -260,7 +277,6 @@ const updateUI = withoutFetch => withoutFetch
       return Promise.all(_rooms.map(room => fetch(`./room/${room.id}`, { credentials: 'include' })
           .then(response => response.json())
           .then(roomData => {
-            console.warn('room', room);
             _messageCache[room.id] = Object.assign({}, roomData);
           })
         ))
@@ -364,5 +380,11 @@ document.getElementById('currentMessage').addEventListener('keypress', e => {
 setInterval(() => {
   updateUI().then(doScrollChatWindowAllTheWayDown);
 }, 5000);
+
+fetch('./whoami')
+  .then(response => response.json())
+  .then(ldapInfo => {
+    _ldapInfo = ldapInfo;
+  });
 
 updateUI().then(doScrollChatWindowAllTheWayDown);

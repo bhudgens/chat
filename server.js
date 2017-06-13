@@ -243,6 +243,10 @@ app.post('/message', (req, res) => getLdapForUser(req.headers["jwt-un"])
     log.error(e);
   }));
 
+app.get('/whoami', (req, res) => getLdapForUser(req.headers["jwt-un"])
+  .then(ldapInfo => res.status(200).json(ldapInfo))
+  .catch(error => res.status(502).json({ error: error.message })));
+
 /********************************************************************
  * Start the Express Server
  ********************************************************************/
