@@ -381,7 +381,7 @@ setInterval(() => {
   updateUI().then(doScrollChatWindowAllTheWayDown);
 }, 5000);
 
-fetch('./whoami')
+fetch('./whoami', { credentials: 'include' })
   .then(response => response.json())
   .then(ldapInfo => {
     _ldapInfo = ldapInfo;
