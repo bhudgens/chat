@@ -255,20 +255,20 @@ const updateUI = withoutFetch => withoutFetch
     Promise.resolve(new Date()),
     fetch('./settings', { credentials: 'include' })
     .then(response => response.json())
-    .then(settings => Promise.all(_rooms.map(room => fetch(`./room/${room.id}`, { credentials: 'include' })
-        .then(response => response.json())
-        .then(roomData => {
-          console.warn('room', room);
-          _currentRoom = roomData;
+    .then(settings => {
+      _rooms = settings.rooms || [];
+      return Promise.all(_rooms.map(room => fetch(`./room/${room.id}`, { credentials: 'include' })
+          .then(response => response.json())
+          .then(roomData => {
+            console.warn('room', room);
+            _messageCache[room.id] = Object.assign({}, roomData);
+          })
+        ))
+        .then(() => {
+          _currentRoom = Object.assign({}, _messageCache[settings.currentRoom]);
           _currentRoom.id = settings.currentRoom;
-          _rooms = settings.rooms || [];
-          _messageCache[room.id] = Object.assign({}, roomData);
-        })
-      ))
-      .then(() => {
-        _currentRoom = _messageCache[settings.currentRoom];
-        _currentRoom.id = settings.currentRoom;
-      }))
+        });
+    })
   ])
   .then(r => {
     if (r[0] > _lastUpdate) {

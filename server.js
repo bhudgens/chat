@@ -112,11 +112,14 @@ const _log = msg => org => {
 };
 
 //XXX: For dev only
-// app.use((req, res, next) => {
-//   req.headers = req.headers || {};
-//   req.headers["jwt-un"] = "bhudgens";
-//   next();
-// });
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === "production") {
+    return next();
+  }
+  req.headers = req.headers || {};
+  req.headers["jwt-un"] = "bhudgens";
+  next();
+});
 
 app.use((req, res, next) => {
   req.headers = req.headers || {};
