@@ -165,19 +165,14 @@ const addMessageToRoom = (room, message) => {
 const ldapCache = {};
 const getLdapForUser = username => typeof ldapCache[username] === "undefined"
   ? http.get(`http://services-internal.glgresearch.com/epildap/searchldap?sAMAccountName=${username}`)
-  .then(_log(["UN:", username, `http://services-internal.glgresearch.com/epildap/searchldap?sAMAccountName=${username}`].join(' ')))
-  .then(_log("ldap response"))
+  // .then(_log(["UN:", username, `http://services-internal.glgresearch.com/epildap/searchldap?sAMAccountName=${username}`].join(' ')))
+  // .then(_log("ldap response"))
   .then(response => JSON.parse(response[2]))
   .then(ldapInfo => {
-    console.log('ldi1', ldapInfo, ldapInfo[0]);
     ldapCache[username] = ldapInfo[0];
     return ldapCache[username];
   })
-  : Promise.resolve(ldapCache[username])
-   .then(ldap => {
-     log.info("worked", ldap);
-     return ldap;
-   });
+  : Promise.resolve(ldapCache[username]);
 
 // app.get('/', (req, res) => res.redirect('https://github.com/Beginnerprise/node_boilerplate'));
 app.use('/', express.static(`${__dirname}/public`));
@@ -186,8 +181,8 @@ app.post('/room', (req, res) => setRoomData(req.body)
   .then(() => res.status(200).json({ status: "OK" })));
 app.get('/room/:room', (req, res) => getLdapForUser(req.headers["jwt-un"])
   .then(ldapInfo => {
-    console.log("h", req.headers);
-    console.log("ldi", ldapInfo);
+    // console.log("h", req.headers);
+    // console.log("ldi", ldapInfo);
     const _roomData = getRoomData({ id: req.params.room });
     if (state.rooms[req.params.room].users.filter(u => u.id === req.headers["jwt-un"]).length === 0) {
       state.rooms[req.params.room].users.push({

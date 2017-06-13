@@ -119,11 +119,13 @@ const updateClickEvents = () => {
     if (~el.parentNode.parentNode.parentNode.parentNode.parentNode.className.indexOf("roomList")) {
       el.addEventListener("click", e => {
         // console.log("room click");
-        const _newRoom = {
-          currentRoom: _rooms.filter(r => r.name === e.target.innerHTML)[0].id
-        };
+        const _roomId = _rooms.filter(r => r && r.name && r.name === e.target.innerHTML)[0].id;
+        _currentRoom = _messageCache[_roomId];
         _currentRoom.currentRoom = _rooms.filter(r => r.name === e.target.innerHTML)[0].id;
         updateUI(true);
+
+        /** Make sure the server remembers */
+        const _newRoom = { currentRoom: _roomId };
         fetch('./settings', {
             method: "POST",
             headers: {
@@ -238,6 +240,8 @@ const doScrollChatWindowAllTheWayDown = () => {
 //   un.value = username;
 // };
 
+const _messageCache = {};
+
 let _lastUpdate = new Date();
 const updateUI = withoutFetch => withoutFetch
   ? Promise.all([
@@ -251,12 +255,19 @@ const updateUI = withoutFetch => withoutFetch
     Promise.resolve(new Date()),
     fetch('./settings', { credentials: 'include' })
     .then(response => response.json())
-    .then(settings => fetch(`./room/${settings.currentRoom}`, { credentials: 'include' })
-      .then(response => response.json())
-      .then(roomData => {
-        _currentRoom = roomData;
+    .then(settings => Promise.all(_rooms.map(room => fetch(`./room/${room.id}`, { credentials: 'include' })
+        .then(response => response.json())
+        .then(roomData => {
+          console.warn('room', room);
+          _currentRoom = roomData;
+          _currentRoom.id = settings.currentRoom;
+          _rooms = settings.rooms || [];
+          _messageCache[room.id] = Object.assign({}, roomData);
+        })
+      ))
+      .then(() => {
+        _currentRoom = _messageCache[settings.currentRoom];
         _currentRoom.id = settings.currentRoom;
-        _rooms = settings.rooms || [];
       }))
   ])
   .then(r => {
