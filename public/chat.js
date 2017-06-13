@@ -138,7 +138,8 @@ const updateClickEvents = () => {
         // console.log("room click");
         const _roomId = _rooms.filter(r => r && r.name && r.name === e.target.innerHTML)[0].id;
         _currentRoom = _messageCache[_roomId];
-        _currentRoom.currentRoom = _rooms.filter(r => r.name === e.target.innerHTML)[0].id;
+        _currentRoom.currentRoom = _roomId;
+        _currentRoom.id = _roomId;
         updateUI(true);
 
         /** Make sure the server remembers */
@@ -313,7 +314,7 @@ const sendMessage = () => {
       text: currentMessage.value,
     },
     room: {
-      id: _currentRoom.id
+      id: _currentRoom.currentRoom
     }
   };
   currentMessage.value = "";
